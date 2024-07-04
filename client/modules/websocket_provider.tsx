@@ -1,17 +1,17 @@
-import React, { useState, createContext } from 'react'
+import React, { useState, createContext } from "react";
 
-type Conn = WebSocket | null
+type Conn = WebSocket | null;
 
 export const WebsocketContext = createContext<{
-  conn: Conn
-  setConn: (c: Conn) => void
+  conn: Conn;
+  setConn: (c: Conn) => void;
 }>({
   conn: null,
   setConn: () => {},
-})
+});
 
 const WebSocketProvider = ({ children }: { children: React.ReactNode }) => {
-  const [conn, setConn] = useState<Conn>(null)
+  const [conn, setConn] = useState<Conn>(null);
 
   return (
     <WebsocketContext.Provider
@@ -22,7 +22,7 @@ const WebSocketProvider = ({ children }: { children: React.ReactNode }) => {
     >
       {children}
     </WebsocketContext.Provider>
-  )
-}
+  );
+};
 
-export default WebSocketProvider
+export default WebSocketProvider;

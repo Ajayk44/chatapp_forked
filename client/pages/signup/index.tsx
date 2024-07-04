@@ -1,11 +1,11 @@
-"use client";
-
+import React from "react";
 import { useRouter } from "next/navigation";
 import { useState, useContext, useEffect } from "react";
 import { API_URL } from "@/constants";
 import { UserInfo, AuthContext } from "@/modules/auth_provider";
 import Link from "next/link";
 const index = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { authenticated } = useContext(AuthContext);
@@ -18,25 +18,25 @@ const index = () => {
       return;
     }
   }, [authenticated]);
+
   const submitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API_URL}/login`, {
+      const res = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, email, password }),
       });
-
       const data = await res.json();
+      console.log(data);
       if (res.ok) {
         const user: UserInfo = {
           username: data.username,
           id: data.id,
         };
-
         localStorage.setItem("user_info", JSON.stringify(user));
         router.push("/");
       }
@@ -51,12 +51,20 @@ const index = () => {
         <div className="text-3xl font-bold text-center">
           <span className="text-blue">welcome!</span>
         </div>
+
         <input
-          placeholder="email"
+          placeholder="Username"
           className="p-3 mt-8 rounded-md border-2 border-grey focus:outline-none focus:border-blue"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          placeholder="Email"
+          className="p-3 mt-4 rounded-md border-2 border-grey focus:outline-none focus:border-blue"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+
         <input
           type="password"
           placeholder="password"
@@ -69,10 +77,10 @@ const index = () => {
           type="submit"
           onClick={submitHandler}
         >
-          login
+          Sign Up
         </button>
-        <Link href={"/signup"} className="text-sm font-semibold text-blue">
-          Sign up for free{" "}
+        <Link href={"/login"} className="text-sm font-semibold text-blue">
+          Already have an account? Login here{" "}
         </Link>
       </form>
     </div>
